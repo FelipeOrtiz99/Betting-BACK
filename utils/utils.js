@@ -162,12 +162,12 @@ function getPlayerOdds(data) {
             .slice(0, 10);
 
             playerOddsAnyTime = playerOddsAnyTime
-            .filter(player => player.value) // Excluir los que no tienen cuota
+            .filter(player => player.value)
             .map(player => ({
                 player: player.player,
-                probability: (1 / fractionalToDecimal(player.value) * 100).toFixed(2) // Formato porcentaje
+                probability: (1 / fractionalToDecimal(player.value) * 100).toFixed(2) 
             }))
-            .sort((a, b) => b.probability - a.probability) // Ordenar de mayor a menor probabilidad
+            .sort((a, b) => b.probability - a.probability)
             .slice(0, 10);           
 
         }

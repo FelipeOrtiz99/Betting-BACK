@@ -25,7 +25,8 @@ const fetchOdds = async (req, res) => {
         lastfivegames: [utils.getLastResultsTeam(response.data.boxscore.form)],
         stadistics: [utils.getStadisticsLeague(response.data.boxscore.teams)],
         headtohead: [utils.getHeadToHead(response.data.boxscore, response.data.headToHeadGames[0])]}, 
-        odds: utils.clearOddsObject(response.data.odds)
+        odds: utils.clearOddsObject(response.data.odds),
+        liveScore :  {[response.data.header.competitions[0].competitors[0].homeAway]: response.data.header.competitions[0].competitors[0].score, [response.data.header.competitions[0].competitors[1].homeAway]: response.data.header.competitions[0].competitors[1].score, matchTime: response.data.header.competitions[0].status.displayClock}
       });
     }
 

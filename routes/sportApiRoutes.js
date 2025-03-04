@@ -7,5 +7,6 @@ const { fetchData, fetchOdds, fetchOddsTeamsNPlayers } = require("../controllers
 router.get("/data", fetchData);
 router.get("/:sport/:league/:matchId/odds", fetchOdds);
 router.get("/:sport/:league/:matchId/odds/teamsnplayers", fetchOddsTeamsNPlayers);
+// router.get("/:sport/:league/:matchId/odds/teamsnplayers", )
 
 module.exports = router;
