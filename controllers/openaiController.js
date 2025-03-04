@@ -16,13 +16,14 @@ const generateText = async (req, res) => {
   
     const {home, draw, away} = res1.data.odds;
     const data = JSON.stringify(res1.data.history);
-    let prompt = utils.interpolate(process.env.SECOND_PROMPT, {home, draw, away,data}); ;
+    let prompt = utils.interpolate(process.env.SECOND_PROMPT, {home, draw, away,data});
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {role: "system", content: process.env.BASE_PROMPT},
         {role: "user", content: prompt},
       ],
+      response_format: {type: "json_object"},
     });
     res.status(200).json(JSON.parse(response.choices[0].message.content));
   } catch (error) {
