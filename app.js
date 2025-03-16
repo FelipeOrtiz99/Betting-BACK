@@ -3,6 +3,7 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
+const swaggerSetup = require('./controllers/swagger');
 
 // Importa las rutas
 const openaiRoutes = require("./routes/openaiRoutes");
@@ -14,6 +15,8 @@ app.use(express.json());
 // Usa las rutas definidas
 app.use("/predition", openaiRoutes);
 app.use("/api", sportApiRoutes);
+
+swaggerSetup(app);
 
 // Inicia el servidor
 const PORT = process.env.PORT || 4000;

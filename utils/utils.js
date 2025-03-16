@@ -17,7 +17,6 @@ function clearOddsObject(odds) {
 
 function getHomeOdds(data) {
     for (const match in data) {
-        // console.log(data[match].provider.id);
         if (data[match].provider.id === '58') {
             return moneyLineToProbability(data[match].homeTeamOdds.moneyLine);
 
@@ -67,9 +66,13 @@ function getStadisticsLeague(data) {
 
     const stadisticsHome = [];
     const stadisticsAway = [];
+
+    if (data[0].statistics === undefined) {
+        return {stadisticsHome: [], stadisticsAway: []};
+    }
+
     let i = 1
     for (const match of data) {
-        // console.log(match)
         for (const j of match.statistics) {
           i === 1 ? stadisticsHome.push({[j.label]: j.displayValue}) : stadisticsAway.push({[j.label]: j.displayValue});
         }
@@ -115,42 +118,43 @@ function interpolate(template, variables) {
     return new Function(...Object.keys(variables), `return \`${template}\`;`)(...Object.values(variables));
 }
 
-
-
 function getTeamOdds(data) {
     const teamOdds = [];
+    let goalsLinear = {};
+
     for (const match of data) {
 
-        if (data[match].provider.id === '2000'){
-            
-        }
+        console.log(match);
 
-        if (match.homeTeamOdds && match.homeTeamOdds.team) {
-            teamOdds.push(match.homeTeamOdds.team);
-        }
-        if (match.awayTeamOdds && match.awayTeamOdds.team) {
-            teamOdds.push(match.awayTeamOdds.team);
-        }
+            if (Object.keys(match.bettingOdds.teamOdds.preMatchOverUnderHandicap).length > 0 && Object.keys(match.bettingOdds.teamOdds.preMatchGoalLineUnder).length > 0 && Object.keys(match.bettingOdds.teamOdds.preMatchGoalLineOver).length > 0) { 
+
+                goalsLinear = {
+                    handicap: match.bettingOdds.teamOdds.preMatchOverUnderHandicap.value,
+                    under: {
+                        probability: (1 / fractionalToDecimal(match.bettingOdds.teamOdds.preMatchGoalLineUnder.value) * 100).toFixed(2)
+                    },
+                    over: {
+                        probability: (1 / fractionalToDecimal(match.bettingOdds.teamOdds.preMatchGoalLineOver.value) * 100).toFixed(2)
+                    }
+                };
+            
+            }
+
     }
-    return teamOdds;
+    return {teamOdds, goalsLinear};
 }
 
 function getPlayerOdds(data) {
     let playerOddsFirstGoal = [];
     let playerOddsAnyTime = [];
     for (const match in data) {
-        for (const i in match) {
-            if (data[match].provider.id != '2000'){
-                continue;
-            }
-            console.log(data[match].provider.id);
 
+            if (data[match].bettingOdds.playerOdds === undefined || Object.keys(data[match].bettingOdds.playerOdds).length === 0) {
+                return {playerOddsFirstGoal: [], playerOddsAnyTime: []};
+            }
 
             playerOddsFirstGoal = data[match].bettingOdds.playerOdds.preMatchFirstGoalScorer
             playerOddsAnyTime = data[match].bettingOdds.playerOdds.preMatchAnyTimeGoalScorer
-
-            console.log(typeof playerOddsFirstGoal);
-            console.log(typeof playerOddsAnyTime);
 
             playerOddsFirstGoal = playerOddsFirstGoal
             .filter(player => player.value)
@@ -171,7 +175,6 @@ function getPlayerOdds(data) {
             .slice(0, 10);           
 
         }
-    }
     return {playerOddsFirstGoal, playerOddsAnyTime};
 }
 
@@ -190,6 +193,6 @@ module.exports = {
     getStadisticsLeague,
     getHeadToHead,
     interpolate,
-    // getTeamOdds,
+    getTeamOdds,
     getPlayerOdds
 };

@@ -15,8 +15,10 @@ const generateText = async (req, res) => {
     let res1 = await axios.get(process.env.BASE_URL + "api/" + `${baseData.sport}/${baseData.league}/${baseData.matchId}/odds`);
   
     const {home, draw, away} = res1.data.odds;
+    console.log("xd");
     const data = JSON.stringify(res1.data.history);
     let prompt = utils.interpolate(process.env.SECOND_PROMPT, {home, draw, away,data});
+    console.log("aa");
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
