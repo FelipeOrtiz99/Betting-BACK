@@ -87,9 +87,6 @@ function getHeadToHead(data, data2) {
     const idHomeTeam = data.teams[0].homeAway === "home" ? data.teams[0].team.id : data.teams[1].team.id;
     const idAwayTeam = data.teams[1].homeAway === "away" ? data.teams[1].team.id : data.teams[0].team.id;
 
-    // console.log(idHomeTeam, idAwayTeam);
-    // console.log(data2);
-
     const headToHead = [];
     for (const match of data2.events) {
         let obj = {};
@@ -123,8 +120,6 @@ function getTeamOdds(data) {
     let goalsLinear = {};
 
     for (const match of data) {
-
-        console.log(match);
 
             if (Object.keys(match.bettingOdds.teamOdds.preMatchOverUnderHandicap).length > 0 && Object.keys(match.bettingOdds.teamOdds.preMatchGoalLineUnder).length > 0 && Object.keys(match.bettingOdds.teamOdds.preMatchGoalLineOver).length > 0) { 
 
@@ -166,12 +161,12 @@ function getPlayerOdds(data) {
             .slice(0, 10);
 
             playerOddsAnyTime = playerOddsAnyTime
-            .filter(player => player.value) // Excluir los que no tienen cuota
+            .filter(player => player.value)
             .map(player => ({
                 player: player.player,
-                probability: (1 / fractionalToDecimal(player.value) * 100).toFixed(2) // Formato porcentaje
+                probability: (1 / fractionalToDecimal(player.value) * 100).toFixed(2) 
             }))
-            .sort((a, b) => b.probability - a.probability) // Ordenar de mayor a menor probabilidad
+            .sort((a, b) => b.probability - a.probability)
             .slice(0, 10);           
 
         }

@@ -15,10 +15,17 @@ const generateText = async (req, res) => {
     let res1 = await axios.get(process.env.BASE_URL + "api/" + `${baseData.sport}/${baseData.league}/${baseData.matchId}/odds`);
   
     const {home, draw, away} = res1.data.odds;
-    console.log("xd");
     const data = JSON.stringify(res1.data.history);
     let prompt = utils.interpolate(process.env.SECOND_PROMPT, {home, draw, away,data});
-    console.log("aa");
+
+    if (res1.data.liveScore != undefined && Object.keys(res1.data.liveScore).length > 0){
+      let homeScore = res1.data.liveScore.home;
+      let awayScore = res1.data.liveScore.away;
+      let matchTime = res1.data.liveScore.matchTime === undefined ? "full time" : res1.data.liveScore.matchTime;
+       prompt += " "
+       prompt += utils.interpolate(process.env.THIRD_PROMPT, {homeScore, awayScore, matchTime}) 
+    }
+
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [

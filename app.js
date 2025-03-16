@@ -2,12 +2,17 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
 const swaggerSetup = require('./controllers/swagger');
 
 // Importa las rutas
 const openaiRoutes = require("./routes/openaiRoutes");
 const sportApiRoutes = require("./routes/sportApiRoutes");
+
+//Habilitar cors TODO:Cuando se cree el sitio cambiar la url
+app.use(cors());
 
 // Middleware para parsear JSON
 app.use(express.json());

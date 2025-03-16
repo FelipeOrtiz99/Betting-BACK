@@ -85,5 +85,6 @@ router.get("/:sport/:league/:matchId/odds", fetchOdds);
 
 
 router.get("/:sport/:league/:matchId/odds/teamsnplayers", fetchOddsTeamsNPlayers);
+// router.get("/:sport/:league/:matchId/odds/teamsnplayers", )
 
 module.exports = router;
