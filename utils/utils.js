@@ -33,6 +33,10 @@ function getDrawOdds(data) {
     }
 }
 
+function prueba(){
+    
+}
+
 function getAwayOdds(data) {
     for (const match in data) {
         if (data[match].provider.id === '58') {
